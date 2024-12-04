@@ -7,7 +7,6 @@
   "exec": "tsc && homebridge -I -D",
   "signal": "SIGTERM",
   "env": {
-    "NODE_OPTIONS": "--trace-warnings --openssl-config=openssl_conf",
-    "NODE_TLS_REJECT_UNAUTHORIZED": "0"
+    "NODE_OPTIONS": "--trace-warnings"
   }
 }
