@@ -42,15 +42,17 @@ export class Lares4HomebridgePlatform implements DynamicPlatformPlugin {
           this.config.sender,
           this.config.ip,
           this.config.pin,
-          this.log
+          this.log,
         );
 
         if (this.lares4.initialized) {
           this.log.info('Lares4 initialized');
           this.configureLares4Accessories();
         }
-      } catch (error: any) {
-        this.log.error(error?.message ?? error);
+      } catch (error) {
+        if (error instanceof Error) {
+          this.log.error(error?.message ?? error); 
+        };
         return;
       }
     });

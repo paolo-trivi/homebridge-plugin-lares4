@@ -39,16 +39,21 @@ export class Lares4PlatformLight {
   }
 
   setStatus(accessoryStatus: Lares4OutputStatus) {
-    const state = accessoryStatus.STA ?? "OFF";
+    const state = accessoryStatus.STA ?? 'OFF';
     const level = accessoryStatus.POS ?? undefined;
 
     this.service.updateCharacteristic(this.platform.Characteristic.On, state === 'ON');
-    if (level) this.service.updateCharacteristic(this.platform.Characteristic.Brightness, level);
+    if (level) {
+      this.service.updateCharacteristic(this.platform.Characteristic.Brightness, level);
+    }
   }
 
   setOn(value: CharacteristicValue) {
-    if (value) switchOn(this.platform.lares4!, this.accessory.context.details.ID);
-    else switchOff(this.platform.lares4!, this.accessory.context.details.ID);
+    if (value) {
+      switchOn(this.platform.lares4!, this.accessory.context.details.ID);
+    } else {
+      switchOff(this.platform.lares4!, this.accessory.context.details.ID);
+    }
   }
 
   getOn(): CharacteristicValue {

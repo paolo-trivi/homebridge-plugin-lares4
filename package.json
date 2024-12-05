@@ -48,6 +48,7 @@
     "@nx-js/observer-util": "^4.2.2",
     "@types/lodash": "^4.17.13",
     "@types/ws": "^8.5.13",
+    "lares4-ts": "^0.0.4",
     "lodash": "^4.17.21",
     "luxon": "^3.5.0",
     "winston": "^3.17.0",

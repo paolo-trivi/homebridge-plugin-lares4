@@ -1,14 +1,11 @@
 import type { CharacteristicValue, PlatformAccessory, Service } from 'homebridge';
-import { observe } from '@nx-js/observer-util';
-import { debounceWithLock, rollTo, Lares4OutputStatus } from 'lares4-ts';
+import { debouncedRollToWithLock, Lares4OutputStatus } from 'lares4-ts';
 
 import { Lares4HomebridgePlatform } from './Lares4HomebridgePlatform';
 
 function roundPercentage(value: number) {
   return Math.max(Math.round(value / 10)) * 10;
 }
-
-const debouncedRollTo = debounceWithLock<typeof rollTo>(rollTo, 500);
 
 export class Lares4PlatformCover {
   private service: Service;
@@ -41,19 +38,22 @@ export class Lares4PlatformCover {
         this.setStatus(output_status.status);
       }
     });
-
   }
 
   setStatus(accessoryStatus: Lares4OutputStatus) {
-    const position = accessoryStatus.POS ?? "0";
+    const position = accessoryStatus.POS ?? '0';
     const roundedPosition = roundPercentage(Number(position));
 
-    const state = accessoryStatus.STA ?? "";
+    const state = accessoryStatus.STA ?? '';
     let positionState = this.platform.Characteristic.PositionState.STOPPED;
-    if (state === "UP") positionState = this.platform.Characteristic.PositionState.INCREASING;
-    if (state === "DOWN") positionState = this.platform.Characteristic.PositionState.DECREASING;
+    if (state === 'UP') {
+      positionState = this.platform.Characteristic.PositionState.INCREASING;
+    }
+    if (state === 'DOWN') {
+      positionState = this.platform.Characteristic.PositionState.DECREASING;
+    }
 
-    const targetPosition = accessoryStatus.TPOS ?? "0";
+    const targetPosition = accessoryStatus.TPOS ?? '0';
     const roundedTargetPosition = roundPercentage(Number(targetPosition));
 
     this.service.updateCharacteristic(this.platform.Characteristic.CurrentPosition, roundedPosition);
@@ -62,37 +62,41 @@ export class Lares4PlatformCover {
   }
 
   getPosition(): CharacteristicValue {
-    const position = this.platform.lares4!.status.outputs?.[this.accessory.context.id]?.POS ?? "0";
+    const position = this.platform.lares4!.status.outputs?.[this.accessory.context.id]?.POS ?? '0';
     const roundedPosition = roundPercentage(Number(position));
     return roundedPosition.toString();
   }
 
   getPositionState(): CharacteristicValue {
-    const status = this.platform.lares4!.status.outputs?.[this.accessory.context.id]?.STA ?? "0";
-    if (status === "UP") return this.platform.Characteristic.PositionState.INCREASING;
-    if (status === "DOWN") return this.platform.Characteristic.PositionState.DECREASING;
+    const status = this.platform.lares4!.status.outputs?.[this.accessory.context.id]?.STA ?? '0';
+    if (status === 'UP') {
+      return this.platform.Characteristic.PositionState.INCREASING;
+    }
+    if (status === 'DOWN') {
+      return this.platform.Characteristic.PositionState.DECREASING;
+    }
     return this.platform.Characteristic.PositionState.STOPPED;
   }
 
   getTargetPosition(): CharacteristicValue {
-    const position = this.platform.lares4!.status.outputs?.[this.accessory.context.id]?.TPOS ?? "0";
+    const position = this.platform.lares4!.status.outputs?.[this.accessory.context.id]?.TPOS ?? '0';
     const roundedPosition = roundPercentage(Number(position));
     return roundedPosition.toString();
   }
 
-  
-
   setTargetPosition(value: CharacteristicValue) {
     try {
-      const position = this.platform.lares4!.status.outputs?.[this.accessory.context.id]?.POS ?? "0";
+      const position = this.platform.lares4!.status.outputs?.[this.accessory.context.id]?.POS ?? '0';
       const timeout = this.platform.config!.coverTimeout * 1000;
       const timeout_percentage = Math.abs(Number(value) - Number(position)) / 100;
-      if (position === value) return;
-      debouncedRollTo(
+      if (position === value) {
+        return;
+      }
+      debouncedRollToWithLock(
         timeout * timeout_percentage,
         this.platform.lares4!,
         this.accessory.context.details.ID,
-        Number(value)
+        Number(value),
       );
     } catch (error) {
       this.platform.log.error(`Failed to set target position: ${error}`);

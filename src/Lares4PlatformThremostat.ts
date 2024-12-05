@@ -11,7 +11,7 @@ import {
   Lares4ThermostatSeasons,
   Lares4ThermostatSeasonConfiguration,
   Lares4SensorStatus,
-  Lares4TemperatureStatus
+  Lares4TemperatureStatus,
 } from 'lares4-ts';
 
 import { Lares4HomebridgePlatform } from './Lares4HomebridgePlatform.js';
@@ -19,7 +19,7 @@ import { Lares4HomebridgePlatform } from './Lares4HomebridgePlatform.js';
 const SEASONS = {
   [Lares4ThermostatSeasons.WINTER]: 'WIN',
   [Lares4ThermostatSeasons.SUMMER]: 'SUM',
-}
+};
 
 function getThermostatTimeoutValue(timeoutValue: number): string {
   if (timeoutValue === 0) {
