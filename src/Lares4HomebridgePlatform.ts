@@ -26,23 +26,32 @@ export class Lares4HomebridgePlatform implements DynamicPlatformPlugin {
     this.Service = api.hap.Service;
     this.Characteristic = api.hap.Characteristic;
 
+    if (!config) {
+      this.log.error('No configuration found');
+      return;
+    }
+
     this.log.debug('Finished initializing platform:', this.config.name);
 
     this.api.on('didFinishLaunching', async () => {
       log.debug('Executed didFinishLaunching callback');
 
-      this.lares4 = await Lares4Factory.createLares4(
-        this.config.sender,
-        this.config.ip,
-        this.config.pin,
-        this.log
-      );
+      try {
+        log.info('Start to initialize Lares4');
+        this.lares4 = await Lares4Factory.createLares4(
+          this.config.sender,
+          this.config.ip,
+          this.config.pin,
+          this.log
+        );
 
-      if (this.lares4.initialized) {
-        this.log.info('Lares4 initialized');
-        this.configureLares4Accessories();
-      } else {
-        this.log.error('Failed to initialize Lares4');
+        if (this.lares4.initialized) {
+          this.log.info('Lares4 initialized');
+          this.configureLares4Accessories();
+        }
+      } catch (error: any) {
+        this.log.error(error?.message ?? error);
+        return;
       }
     });
   }
