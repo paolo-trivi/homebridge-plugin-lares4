@@ -108,18 +108,21 @@ export class Lares4PlatformThermostat {
   }
 
   getTargetTemperature(): CharacteristicValue {
-    const season = (this.platform.lares4!.configuration.thermostats?.[this.accessory.context.configuration.id] as Lares4ThermostatConfiguration).ACT_SEA as Lares4ThermostatSeasons;
-    return parseFloat((this.platform.lares4!.configuration.thermostats?.[this.accessory.context.configuration.id][SEASONS[season] as keyof Lares4ThermostatConfiguration] as Lares4ThermostatSeasonConfiguration).TM);
+    const configuration = this.platform.lares4!.configuration.thermostats?.[this.accessory.context.configuration.id] as Lares4ThermostatConfiguration;
+    const season = configuration.ACT_SEA as Lares4ThermostatSeasons;
+    return parseFloat((configuration[SEASONS[season] as keyof Lares4ThermostatConfiguration] as Lares4ThermostatSeasonConfiguration).TM);
   }
 
   setTargetTemperature(value: CharacteristicValue) {
-    const season = (this.platform.lares4!.configuration.thermostats?.[this.accessory.context.configuration.id] as Lares4ThermostatConfiguration).ACT_SEA as Lares4ThermostatSeasons;
+    const configuration = this.platform.lares4!.configuration.thermostats?.[this.accessory.context.configuration.id] as Lares4ThermostatConfiguration;
+    const season = configuration.ACT_SEA as Lares4ThermostatSeasons;
     setThermostatTarget(this.platform.lares4!, this.accessory.context.configuration.id, season, value as number);
   }
 
   getCurrentHeatingCoolingState(): CharacteristicValue {
-    const act_mode = (this.platform.lares4!.configuration.thermostats?.[this.accessory.context.configuration.id] as Lares4ThermostatConfiguration).ACT_MODE as Lares4ThermostatActModes;
-    const season = (this.platform.lares4!.configuration.thermostats?.[this.accessory.context.configuration.id] as Lares4ThermostatConfiguration).ACT_SEA as Lares4ThermostatSeasons;
+    const configuration = this.platform.lares4!.configuration.thermostats?.[this.accessory.context.configuration.id] as Lares4ThermostatConfiguration;
+    const act_mode = configuration.ACT_MODE as Lares4ThermostatActModes;
+    const season = configuration.ACT_SEA as Lares4ThermostatSeasons;
 
     if (act_mode !== Lares4ThermostatActModes.OFF) {
       if (season === Lares4ThermostatSeasons.WINTER) {

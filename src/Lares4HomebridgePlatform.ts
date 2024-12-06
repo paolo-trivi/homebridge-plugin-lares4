@@ -6,7 +6,7 @@ import { PLATFORM_NAME, PLUGIN_NAME } from './settings.js';
 import { Lares4PlatformLight } from './Lares4PlatformLight.js';
 import { Lares4PlatformCover } from './Lares4PlatformCover.js';
 import { Lares4PlatformScenario } from './Lares4PlatformScenario.js';
-import { Lares4PlatformThermostat } from './Lares4PlatformThremostat.js';
+import { Lares4PlatformThermostat } from './Lares4PlatformThermostat.js';
 import { Lares4PlatformLightSensor } from './Lares4PlatformLightSensor.js';
 
 export class Lares4HomebridgePlatform implements DynamicPlatformPlugin {
