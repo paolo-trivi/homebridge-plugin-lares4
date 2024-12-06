@@ -2,21 +2,24 @@
   "name": "homebridge-plugin-lares4",
   "displayName": "Lares 4 Homebridge Plugin",
   "type": "module",
-  "version": "1.0.0",
-  "private": true,
-  "description": "",
+  "version": "0.0.1",
+  "private": false,
+  "description": "a homebridge plugin to expose Ksenia Lares 4 home automation systems on the Apple ecosystem",
   "author": "Giuseppe Sorrentino",
   "license": "ISC",
-  "homepage": "https://github.com/USERNAME/GITHUB_PROJECT_NAME#readme",
+  "homepage": "https://github.com/glsorre/homebridge-plugin-lares4#readme",
   "repository": {
     "type": "git",
-    "url": "https://github.com/USERNAME/GITHUB_PROJECT_NAME.git"
+    "url": "https://github.com/glsorre/homebridge-plugin-lares4.git"
   },
   "bugs": {
-    "url": "https://github.com/USERNAME/GITHUB_PROJECT_NAME/issues"
+    "url": "https://github.com/glsorre/homebridge-plugin-lares4/issues"
   },
   "keywords": [
-    "homebridge-plugin"
+    "homebridge-plugin",
+    "homebridge",
+    "lares4",
+    "ksenia"
   ],
   "main": "dist/index.js",
   "engines": {
@@ -44,12 +47,9 @@
     "typescript-eslint": "^8.12.2"
   },
   "dependencies": {
-    "@inquirer/prompts": "^7.1.0",
-    "@nx-js/observer-util": "^4.2.2",
     "@types/lodash": "^4.17.13",
     "@types/ws": "^8.5.13",
-    "lares4-ts": "^0.0.4",
-    "lodash": "^4.17.21",
+    "lares4-ts": "^0.0.6",
     "luxon": "^3.5.0",
     "winston": "^3.17.0",
     "ws": "^8.18.0"
