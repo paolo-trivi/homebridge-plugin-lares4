@@ -80,14 +80,8 @@ export class Lares4HomebridgePlatform implements DynamicPlatformPlugin {
 
       if (existingAccessory) {
         this.log.info('Restoring existing light from cache:', existingAccessory.displayName);
-        if (
-          this.lares4?.status.outputs?.[existingAccessory.context.id]?.POS &&
-          !existingAccessory.getService(this.Service.Lightbulb)?.getCharacteristic(this.Characteristic.Brightness)
-        ) {
-          this.log.info('Updating light:', existingAccessory.displayName);
-          existingAccessory.context = light;
-          this.api.updatePlatformAccessories([existingAccessory]);
-        }
+        existingAccessory.context = light;
+        this.api.updatePlatformAccessories([existingAccessory]);
         new Lares4PlatformLight(this, existingAccessory);
       } else {
         this.log.info(`Adding new light: ${light.details.ID} - ${light.details.DES}`);
@@ -105,15 +99,8 @@ export class Lares4HomebridgePlatform implements DynamicPlatformPlugin {
 
       if (existingAccessory) {
         this.log.info('Restoring existing cover from cache:', existingAccessory.displayName);
-        if (
-          (this.lares4?.status.outputs?.[existingAccessory.context.id]?.TPOS &&
-          !existingAccessory.getService(this.Service.Window)?.getCharacteristic(this.Characteristic.TargetPosition))
-        ) {
-          this.log.info('Updating cover:', existingAccessory.displayName);
-          existingAccessory.context = cover;
-          this.api.updatePlatformAccessories([existingAccessory]);
-          new Lares4PlatformCover(this, existingAccessory);
-        }
+        existingAccessory.context = cover;
+        this.api.updatePlatformAccessories([existingAccessory]);
         new Lares4PlatformCover(this, existingAccessory);
       } else {
         this.log.info(`Adding new cover: ${cover.details.ID} - ${cover.details.DES}`);
@@ -170,12 +157,13 @@ export class Lares4HomebridgePlatform implements DynamicPlatformPlugin {
         this.api.updatePlatformAccessories([existingSensor]);
         new Lares4PlatformLightSensor(this, existingSensor);
       } else {
-        this.log.info(`Adding new sensor: ${thermostat.sensor.details.ID} - Domus`);
+        this.log.info(`Adding new sensor: ${thermostat.sensor.details.ID} - Light sensor`);
         const accessory = new this.api.platformAccessory(`Domus light sensor ${thermostat.sensor.details.ID}`, uuid_sensor);
         accessory.context = thermostat;
         new Lares4PlatformLightSensor(this, accessory);
         this.api.registerPlatformAccessories(PLUGIN_NAME, PLATFORM_NAME, [accessory]);
       }
+      this.discoveredCacheUUIDs.push(uuid_sensor);
     });
 
     for (const [uuid, accessory] of this.accessories) {
