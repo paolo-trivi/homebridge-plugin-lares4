@@ -20,6 +20,11 @@ I followed the following principles developing the plugin:
 # Roadmap
 
 - [X] Publish on github;
+- [X] Publish on npmjs;
+- [ ] Testing phase;
 - [ ] Documentation;
-- [ ] Publish on npmjs;
 - [ ] Cover entire ksenia ecosystem.
+
+# Disclaimer
+
+This project and its authors are not affiliated in any way with Ksenia Security S.p.A. or other entities connected with it.
