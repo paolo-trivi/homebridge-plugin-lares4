@@ -100,6 +100,7 @@ export class Lares4PlatformThermostat {
         currentHeatingCoolingState = this.platform.Characteristic.CurrentHeatingCoolingState.COOL;
       }
     }
+    this.thermostat.updateCharacteristic(this.platform.Characteristic.TargetHeatingCoolingState, currentHeatingCoolingState);
     this.thermostat.updateCharacteristic(this.platform.Characteristic.CurrentHeatingCoolingState, currentHeatingCoolingState);
   }
   

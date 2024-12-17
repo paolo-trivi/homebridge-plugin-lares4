@@ -56,9 +56,9 @@ export class Lares4PlatformCover {
     const targetPosition = accessoryStatus.TPOS ?? '0';
     const roundedTargetPosition = roundPercentage(Number(targetPosition));
 
+    this.service.updateCharacteristic(this.platform.Characteristic.TargetPosition, roundedTargetPosition);
     this.service.updateCharacteristic(this.platform.Characteristic.CurrentPosition, roundedPosition);
     this.service.updateCharacteristic(this.platform.Characteristic.PositionState, positionState);
-    this.service.updateCharacteristic(this.platform.Characteristic.TargetPosition, roundedTargetPosition);
   }
 
   getPosition(): CharacteristicValue {
