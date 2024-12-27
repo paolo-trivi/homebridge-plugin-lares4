@@ -1,5 +1,5 @@
 import type { CharacteristicValue, PlatformAccessory, Service } from 'homebridge';
-import { debouncedRollToWithLock, Lares4OutputStatus } from 'lares4-ts';
+import { debounceWithLock, rollTo, Lares4OutputStatus } from 'lares4-ts';
 
 import { Lares4HomebridgePlatform } from './Lares4HomebridgePlatform';
 
@@ -9,6 +9,7 @@ function roundPercentage(value: number) {
 
 export class Lares4PlatformCover {
   private service: Service;
+  private debouncedRollToWithLock = debounceWithLock(rollTo, 2000);
 
   constructor(
     private readonly platform: Lares4HomebridgePlatform,
@@ -42,9 +43,11 @@ export class Lares4PlatformCover {
 
   setStatus(accessoryStatus: Lares4OutputStatus) {
     const position = accessoryStatus.POS ?? '0';
+    // const targetPosition = accessoryStatus.TPOS ?? '0';
     const roundedPosition = roundPercentage(Number(position));
-
+    // const roundedTargetPosition = roundPercentage(Number(targetPosition));
     const state = accessoryStatus.STA ?? '';
+
     let positionState = this.platform.Characteristic.PositionState.STOPPED;
     if (state === 'UP') {
       positionState = this.platform.Characteristic.PositionState.INCREASING;
@@ -53,10 +56,7 @@ export class Lares4PlatformCover {
       positionState = this.platform.Characteristic.PositionState.DECREASING;
     }
 
-    const targetPosition = accessoryStatus.TPOS ?? '0';
-    const roundedTargetPosition = roundPercentage(Number(targetPosition));
-
-    this.service.updateCharacteristic(this.platform.Characteristic.TargetPosition, roundedTargetPosition);
+    // this.service.updateCharacteristic(this.platform.Characteristic.TargetPosition, roundedTargetPosition);
     this.service.updateCharacteristic(this.platform.Characteristic.CurrentPosition, roundedPosition);
     this.service.updateCharacteristic(this.platform.Characteristic.PositionState, positionState);
   }
@@ -92,12 +92,13 @@ export class Lares4PlatformCover {
       if (position === value) {
         return;
       }
-      debouncedRollToWithLock(
+      this.debouncedRollToWithLock(
         timeout * timeout_percentage,
         this.platform.lares4!,
         this.accessory.context.details.ID,
         Number(value),
       );
+      this.service.updateCharacteristic(this.platform.Characteristic.TargetPosition, Number(value));
     } catch (error) {
       this.platform.log.error(`Failed to set target position: ${error}`);
     }
