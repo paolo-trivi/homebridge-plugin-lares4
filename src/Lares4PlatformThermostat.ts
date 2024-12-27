@@ -88,23 +88,28 @@ export class Lares4PlatformThermostat {
   }
 
   setTemperatureStatus(temperatureStatus: Lares4TemperatureStatus) {
-    const { TEMP, THERM: { ACT_MODEL, ACT_SEA } } = temperatureStatus;
-    this.thermostat.updateCharacteristic(this.platform.Characteristic.CurrentTemperature, parseFloat(TEMP));
+    const { THERM: { ACT_MODEL, ACT_SEA } } = temperatureStatus;
     
-    // let targetHeatingCoolingState = this.platform.Characteristic.TargetHeatingCoolingState.OFF;
     let currentHeatingCoolingState = this.platform.Characteristic.CurrentHeatingCoolingState.OFF;
-    if (ACT_MODEL !== Lares4ThermostatActModes.OFF) {
+    let targetHeatingCoolingState = this.platform.Characteristic.TargetHeatingCoolingState.OFF;
+
+    if (ACT_MODEL === Lares4ThermostatActModes.MANUAL || ACT_MODEL === Lares4ThermostatActModes.MANUAL_TIMER){
       if (ACT_SEA === Lares4ThermostatSeasons.WINTER) {
         currentHeatingCoolingState = this.platform.Characteristic.CurrentHeatingCoolingState.HEAT;
-        // targetHeatingCoolingState = this.platform.Characteristic.TargetHeatingCoolingState.HEAT;
+        targetHeatingCoolingState = this.platform.Characteristic.TargetHeatingCoolingState.HEAT;
       }
       if (ACT_SEA === Lares4ThermostatSeasons.SUMMER) {
         currentHeatingCoolingState = this.platform.Characteristic.CurrentHeatingCoolingState.COOL;
-        // targetHeatingCoolingState = this.platform.Characteristic.TargetHeatingCoolingState.COOL;
+        targetHeatingCoolingState = this.platform.Characteristic.TargetHeatingCoolingState.COOL;
       }
     }
-    // this.thermostat.updateCharacteristic(this.platform.Characteristic.TargetHeatingCoolingState, targetHeatingCoolingState);
+
     this.thermostat.updateCharacteristic(this.platform.Characteristic.CurrentHeatingCoolingState, currentHeatingCoolingState);
+
+    const previousHeatingCoolingState = this.thermostat.getCharacteristic(this.platform.Characteristic.TargetHeatingCoolingState).value;
+    if (previousHeatingCoolingState !== targetHeatingCoolingState) {
+      this.thermostat.updateCharacteristic(this.platform.Characteristic.TargetHeatingCoolingState, targetHeatingCoolingState);
+    }
   }
   
   getCurrentTemperature(): CharacteristicValue {

@@ -43,9 +43,9 @@ export class Lares4PlatformCover {
 
   setStatus(accessoryStatus: Lares4OutputStatus) {
     const position = accessoryStatus.POS ?? '0';
-    // const targetPosition = accessoryStatus.TPOS ?? '0';
+    const targetPosition = accessoryStatus.TPOS ?? '0';
     const roundedPosition = roundPercentage(Number(position));
-    // const roundedTargetPosition = roundPercentage(Number(targetPosition));
+    const roundedTargetPosition = roundPercentage(Number(targetPosition));
     const state = accessoryStatus.STA ?? '';
 
     let positionState = this.platform.Characteristic.PositionState.STOPPED;
@@ -56,7 +56,11 @@ export class Lares4PlatformCover {
       positionState = this.platform.Characteristic.PositionState.DECREASING;
     }
 
-    // this.service.updateCharacteristic(this.platform.Characteristic.TargetPosition, roundedTargetPosition);
+    const currentTargetPosition = this.service.getCharacteristic(this.platform.Characteristic.TargetPosition).value;
+
+    if (currentTargetPosition !== roundedTargetPosition) {
+      this.service.updateCharacteristic(this.platform.Characteristic.TargetPosition, roundedTargetPosition);
+    }
     this.service.updateCharacteristic(this.platform.Characteristic.CurrentPosition, roundedPosition);
     this.service.updateCharacteristic(this.platform.Characteristic.PositionState, positionState);
   }
