@@ -129,7 +129,7 @@ export class Lares4PlatformThermostat {
   getCurrentHeatingCoolingState(): CharacteristicValue {
     const { THERM: { ACT_SEA, OUT_STATUS } } = this.platform.lares4!.status.temperatures?.[this.accessory.context.temperature.id] as Lares4TemperatureStatus;
 
-    if (OUT_STATUS !== 'ON') {
+    if (OUT_STATUS === 'ON') {
       if (ACT_SEA === Lares4ThermostatSeasons.WINTER) {
         return this.platform.Characteristic.CurrentHeatingCoolingState.HEAT;
       }
