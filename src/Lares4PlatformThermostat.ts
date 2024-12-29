@@ -127,31 +127,28 @@ export class Lares4PlatformThermostat {
   }
 
   getCurrentHeatingCoolingState(): CharacteristicValue {
-    const configuration = this.platform.lares4!.configuration.thermostats?.[this.accessory.context.configuration.id] as Lares4ThermostatConfiguration;
-    const act_mode = configuration.ACT_MODE as Lares4ThermostatActModes;
-    const season = configuration.ACT_SEA as Lares4ThermostatSeasons;
+    const { THERM: { ACT_SEA, OUT_STATUS } } = this.platform.lares4!.status.temperatures?.[this.accessory.context.temperature.id] as Lares4TemperatureStatus;
 
-    if (act_mode !== Lares4ThermostatActModes.OFF) {
-      if (season === Lares4ThermostatSeasons.WINTER) {
+    if (OUT_STATUS !== 'ON') {
+      if (ACT_SEA === Lares4ThermostatSeasons.WINTER) {
         return this.platform.Characteristic.CurrentHeatingCoolingState.HEAT;
       }
-      if (season === Lares4ThermostatSeasons.SUMMER) {
+      if (ACT_SEA === Lares4ThermostatSeasons.SUMMER) {
         return this.platform.Characteristic.CurrentHeatingCoolingState.COOL;
       }
     }
+
     return this.platform.Characteristic.CurrentHeatingCoolingState.OFF;
   }
 
   getTargetHeatingCoolingState(): CharacteristicValue {
-    const configuration = this.platform.lares4!.configuration.thermostats?.[this.accessory.context.configuration.id] as Lares4ThermostatConfiguration;
-    const act_mode = configuration.ACT_MODE as Lares4ThermostatActModes;
-    const season = configuration.ACT_SEA as Lares4ThermostatSeasons;
+    const { THERM: { ACT_MODEL, ACT_SEA } } = this.platform.lares4!.status.temperatures?.[this.accessory.context.temperature.id] as Lares4TemperatureStatus;
 
-    if (act_mode !== Lares4ThermostatActModes.OFF) {
-      if (season === Lares4ThermostatSeasons.WINTER) {
+    if (ACT_MODEL !== Lares4ThermostatActModes.OFF) {
+      if (ACT_SEA === Lares4ThermostatSeasons.WINTER) {
         return this.platform.Characteristic.TargetHeatingCoolingState.HEAT;
       }
-      if (season === Lares4ThermostatSeasons.SUMMER) {
+      if (ACT_SEA === Lares4ThermostatSeasons.SUMMER) {
         return this.platform.Characteristic.TargetHeatingCoolingState.COOL;
       }
     }
