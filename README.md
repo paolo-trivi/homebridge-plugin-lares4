@@ -21,7 +21,7 @@ I followed the following principles developing the plugin:
 
 - [X] Publish on github;
 - [X] Publish on npmjs;
-- [ ] Testing phase;
+- [X] Testing phase;
 - [ ] Documentation;
 - [ ] Cover entire ksenia ecosystem.
 
