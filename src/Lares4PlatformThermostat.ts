@@ -18,12 +18,12 @@ import { Lares4HomebridgePlatform } from './Lares4HomebridgePlatform.js';
 
 function getThermostatTimeoutValue(timeoutValue: number): string {
   if (timeoutValue === 0) {
-    return '00:00';
+    return '00';
   }
   const now = DateTime.now();
   const nearestHour = now.minute >= 30 ? now.hour + 1 : now.hour;
   const target = DateTime.fromObject({ hour: nearestHour }).plus({ hour: timeoutValue });
-  return target.toFormat('HH:mm');
+  return target.toFormat('HH');
 }
 
 export class Lares4PlatformThermostat {
