@@ -74,6 +74,8 @@ export class Lares4HomebridgePlatform implements DynamicPlatformPlugin {
 
     const thermostats = this.lares4?.thermostats || [];
 
+    const gates = this.lares4?.gates || [];
+
     lights.forEach(light => {
       const uuid = this.api.hap.uuid.generate(`${light.details.ID}-light`);
       const existingAccessory = this.accessories.get(uuid);
@@ -125,6 +127,25 @@ export class Lares4HomebridgePlatform implements DynamicPlatformPlugin {
         this.log.info(`Adding new scenario: ${scenario.details.ID} - ${scenario.details.DES}`);
         const accessory = new this.api.platformAccessory(scenario.details.DES, uuid);
         accessory.context = scenario;
+        new Lares4PlatformScenario(this, accessory);
+        this.api.registerPlatformAccessories(PLUGIN_NAME, PLATFORM_NAME, [accessory]);
+      }
+      this.discoveredCacheUUIDs.push(uuid);
+    });
+
+    gates.forEach(gate => {
+      const uuid = this.api.hap.uuid.generate(`${gate.details.ID}-gate`);
+      const existingAccessory = this.accessories.get(uuid);
+
+      if (existingAccessory) {
+        this.log.info('Restoring existing gate from cache:', existingAccessory.displayName);
+        existingAccessory.context = gate;
+        this.api.updatePlatformAccessories([existingAccessory]);
+        new Lares4PlatformScenario(this, existingAccessory);
+      } else {
+        this.log.info(`Adding new scenario: ${gate.details.ID} - ${gate.details.DES}`);
+        const accessory = new this.api.platformAccessory(gate.details.DES, uuid);
+        accessory.context = gate;
         new Lares4PlatformScenario(this, accessory);
         this.api.registerPlatformAccessories(PLUGIN_NAME, PLATFORM_NAME, [accessory]);
       }
