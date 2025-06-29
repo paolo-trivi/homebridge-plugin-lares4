@@ -24,6 +24,7 @@
         "title": "PIN",
         "type": "string"
       },
+      "https": { "type": "boolean", "title": "HTTPS", "default": true },
       "coverTimeout": {
         "title": "Maximum covers timeout (seconds)",
         "type": "integer",
@@ -39,6 +40,7 @@
       "name",
       "ip",
       "pin",
+      "https",
       "coverTimeout",
       "thermostatManualTimeout"
     ]

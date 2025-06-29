@@ -42,6 +42,7 @@ export class Lares4HomebridgePlatform implements DynamicPlatformPlugin {
           this.config.sender,
           this.config.ip,
           this.config.pin,
+          this.config.https, // Default to true if not specified
           this.log,
         );
 
