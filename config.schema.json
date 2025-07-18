@@ -2,47 +2,105 @@
   "pluginAlias": "Lares4HomebridgePlugin",
   "pluginType": "platform",
   "singular": true,
-  "strictValidation": false,
   "schema": {
     "type": "object",
     "properties": {
+      "platform": {
+        "title": "Platform",
+        "type": "string",
+        "required": true,
+        "default": "Lares4HomebridgePlugin"
+      },
       "name": {
         "title": "Name",
         "type": "string",
-        "default": "Lares4 Homebridge Plugin"
+        "required": true,
+        "default": "Lares4HomebridgePlugin"
       },
       "ip": {
-        "title": "Lares 4 central local IP",
+        "title": "IP Address",
         "type": "string",
-        "format": "ipv4"
-      },
-      "sender": {
-        "title": "Sender",
-        "type": "string"
+        "required": true,
+        "format": "ipv4",
+        "placeholder": "192.168.0.1",
+        "description": "IP address of the Lares4 panel"
       },
       "pin": {
-        "title": "PIN",
-        "type": "string"
+        "title": "PIN Code",
+        "type": "string",
+        "required": true,
+        "placeholder": "1234",
+        "description": "PIN code of the Lares4 user"
       },
-      "https": { "type": "boolean", "title": "HTTPS", "default": true },
+      "sender": {
+        "title": "Sender ID",
+        "type": "string",
+        "required": true,
+        "default": "9ab4c4e7-0ce5-48d8-8c15-3714347036a7-i1",
+        "description": "Sender ID of the Lares4 user (leave as default if unsure)"
+      },
+      "https": {
+        "title": "Use HTTPS",
+        "type": "boolean",
+        "default": true,
+        "description": "Whether to use HTTPS/WSS for connection"
+      },
       "coverTimeout": {
-        "title": "Maximum covers timeout (seconds)",
+        "title": "Cover Timeout",
         "type": "integer",
-        "minimum": 0
+        "required": true,
+        "default": 30,
+        "minimum": 5,
+        "maximum": 300,
+        "description": "Timeout for cover operations in seconds"
       },
-      "theromstatManualTimeout": {
-        "title": "Thermostat default timeout (hours)",
+      "thermostatManualTimeout": {
+        "title": "Thermostat Manual Timeout",
         "type": "integer",
-        "minimum": 0
+        "required": true,
+        "default": 2,
+        "minimum": 0,
+        "maximum": 24,
+        "description": "Timeout for thermostat manual mode in hours (0 to disable)"
+      },
+      "connectionConfig": {
+        "title": "Connection Configuration",
+        "type": "object",
+        "properties": {
+          "reconnectInterval": {
+            "title": "Reconnect Interval",
+            "type": "integer",
+            "default": 5000,
+            "minimum": 1000,
+            "maximum": 60000,
+            "description": "Base interval between reconnection attempts in milliseconds"
+          },
+          "maxReconnectAttempts": {
+            "title": "Max Reconnect Attempts",
+            "type": "integer",
+            "default": -1,
+            "minimum": -1,
+            "description": "Maximum reconnection attempts (-1 for infinite)"
+          },
+          "heartbeatInterval": {
+            "title": "Heartbeat Interval",
+            "type": "integer",
+            "default": 30000,
+            "minimum": 5000,
+            "maximum": 300000,
+            "description": "Interval for connection health checks in milliseconds"
+          },
+          "connectionTimeout": {
+            "title": "Connection Timeout",
+            "type": "integer",
+            "default": 10000,
+            "minimum": 3000,
+            "maximum": 30000,
+            "description": "Timeout for initial connection attempts in milliseconds"
+          }
+        },
+        "description": "Advanced connection management settings"
       }
-    },
-    "required": [
-      "name",
-      "ip",
-      "pin",
-      "https",
-      "coverTimeout",
-      "thermostatManualTimeout"
-    ]
+    }
   }
 }

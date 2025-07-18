@@ -6,8 +6,17 @@
       "ip": "192.168.0.1", // Required, IP address of the Lares4 panel
       "pin": "1234", // Required, PIN code of the Lares4 user
       "sender": "9ab4c4e7-0ce5-48d8-8c15-3714347036a7-i1", // Required, sender ID of the Lares4 user (leave as is if you do not know what to do)
+      "https": true, // Optional, whether to use HTTPS/WSS (default: true)
       "coverTimeout": 30, // Required, timeout for the cover in seconds
-      "theromstatManualTimeout": 2 // Required, timeout for the thermostat manual mode in hours (0 to disable)
+      "thermostatManualTimeout": 2, // Required, timeout for the thermostat manual mode in hours (0 to disable)
+      
+      // Optional: Advanced connection management settings
+      "connectionConfig": {
+        "reconnectInterval": 5000, // Base interval between reconnection attempts (5 seconds)
+        "maxReconnectAttempts": -1, // Maximum reconnection attempts (-1 for infinite)
+        "heartbeatInterval": 30000, // Interval for connection health checks (30 seconds)
+        "connectionTimeout": 10000 // Timeout for initial connection attempts (10 seconds)
+      }
     }
   ]
 }
