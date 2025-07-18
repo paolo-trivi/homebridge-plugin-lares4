@@ -2,9 +2,9 @@
   "name": "homebridge-plugin-lares4",
   "displayName": "Lares 4 Homebridge Plugin",
   "type": "module",
-  "version": "0.0.13-beta.6",
+  "version": "0.0.14-beta.1",
   "private": false,
-  "description": "a homebridge plugin to expose Ksenia Lares 4 home automation systems on the Apple ecosystem",
+  "description": "A homebridge plugin to expose Ksenia Lares 4 home automation systems on the Apple ecosystem with advanced connection management and automatic reconnection",
   "author": "Giuseppe Sorrentino",
   "license": "ISC",
   "homepage": "https://github.com/glsorre/homebridge-plugin-lares4#readme",
@@ -19,7 +19,11 @@
     "homebridge-plugin",
     "homebridge",
     "lares4",
-    "ksenia"
+    "ksenia",
+    "home-automation",
+    "websocket",
+    "reconnection",
+    "connection-management"
   ],
   "main": "dist/index.js",
   "engines": {
